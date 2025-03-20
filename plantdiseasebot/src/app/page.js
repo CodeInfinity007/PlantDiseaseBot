@@ -19,11 +19,11 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-stretch justify-center bg-gray-100 p-6">
+    <div className="relative min-h-screen gap-5 flex items-stretch justify-center bg-gray-100 p-6">
       {/* Left Panel */}
       <div
-        className="flex flex-col w-1/5 bg-[#121b22] rounded-2xl shadow-lg p-6 mr-2"
-        style={{ marginRight: '50px' }}
+        className="flex flex-col w-1/3 bg-[#121b22] rounded-2xl shadow-lg p-6 mr-6"
+        style={{ marginRight: '10px' }}
       >
         <h2 className="text-3xl font-bold mb-4 text-center text-white">Menu</h2>
         <ul className="flex flex-col gap-2 text-white">
@@ -36,7 +36,7 @@ export default function Chatbot() {
 
       {/* Chatbot Panel */}
       <div
-        className="flex flex-col w-3/4 bg-white rounded-2xl shadow-lg p-6"
+        className="flex flex-col w-3/2 bg-white rounded-2xl shadow-lg p-6"
         style={{
           backgroundImage: "url('/bgr.jpg')",
           backgroundSize: 'cover',
@@ -45,8 +45,11 @@ export default function Chatbot() {
         }}
       >
         <div className="text-4xl font-bold text-center mb-4 text-[#1f2c34]">PlantDiseaseBot</div>
+
+        {/* Chat Messages Container with Scrollbar */}
         <div
           className="flex-1 bg-transparent rounded-lg p-4 mb-4 overflow-y-auto"
+          style={{ maxHeight: '75vh' }} // Set a fixed height for the chat messages container
         >
           {messages.map((msg, index) => (
             <div
@@ -55,8 +58,8 @@ export default function Chatbot() {
             >
               <div
                 className={`p-3 my-2 rounded-lg max-w-max ${msg.sender === 'user'
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-300 text-black'
+                  ? 'bg-green-800 text-white'
+                  : 'bg-gray-300 text-black'
                   }`}
               >
                 {msg.text}
@@ -66,20 +69,29 @@ export default function Chatbot() {
         </div>
 
         {/* Input Box and Send Button */}
-        <div className="flex gap-2 bg-transparent p-3 rounded-lg">
+        <div className="flex items-center bg-white border border-gray-300 rounded-lg p-2">
           <input
             type="text"
-            className="flex-grow p-3 text-xl text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="flex-grow p-2 text-xl text-black focus:outline-none"
             placeholder="Type a message..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
           />
           <button
-            className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+            className="p-2 text-white bg-green-500 rounded-lg hover:bg-green-600 transition-colors duration-300"
             onClick={sendMessage}
           >
-            Send
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="currentColor"
+            >
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+            </svg>
           </button>
         </div>
       </div>
