@@ -22,8 +22,8 @@ export default function Chatbot() {
     <div className="relative min-h-screen flex items-stretch justify-center bg-gray-100 p-6">
       {/* Left Panel */}
       <div
-        className="flex flex-col w-1/4 bg-[#121b22] rounded-2xl shadow-lg p-6 mr-2"
-        style={{ marginRight: '10px' }}
+        className="flex flex-col w-1/5 bg-[#121b22] rounded-2xl shadow-lg p-6 mr-2"
+        style={{ marginRight: '50px' }}
       >
         <h2 className="text-3xl font-bold mb-4 text-center text-white">Menu</h2>
         <ul className="flex flex-col gap-2 text-white">
@@ -34,7 +34,6 @@ export default function Chatbot() {
         </ul>
       </div>
 
-      {/* Chatbot Panel */}
       {/* Chatbot Panel */}
       <div
         className="flex flex-col w-3/4 bg-white rounded-2xl shadow-lg p-6"
@@ -52,16 +51,19 @@ export default function Chatbot() {
           {messages.map((msg, index) => (
             <div
               key={index}
-              className={`p-3 my-2 rounded-lg max-w-max ${msg.sender === 'user'
-                  ? 'self-start bg-blue-500 text-white text-left'
-                  : 'self-end bg-gray-300 text-black text-right'
-                }`}
+              className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              {msg.text}
+              <div
+                className={`p-3 my-2 rounded-lg max-w-max ${msg.sender === 'user'
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-300 text-black'
+                  }`}
+              >
+                {msg.text}
+              </div>
             </div>
           ))}
         </div>
-
 
         {/* Input Box and Send Button */}
         <div className="flex gap-2 bg-transparent p-3 rounded-lg">
@@ -81,7 +83,6 @@ export default function Chatbot() {
           </button>
         </div>
       </div>
-
     </div>
   );
 }
