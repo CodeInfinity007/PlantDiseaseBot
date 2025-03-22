@@ -1,21 +1,43 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
-  const sendMessage = () => {
+  // Fetch initial message from Flask when component loads
+  useEffect(() => {
+    fetch("http://127.0.0.1:5000/get_message")
+      .then((res) => res.json())
+      .then((data) => {
+        setMessages([{ text: data.message, sender: 'bot' }]);
+      })
+      .catch((err) => console.error("Error fetching message:", err));
+  }, []);
+
+  // Send user message to Flask and get response
+  const sendMessage = async () => {
     if (input.trim() === '') return;
-    setMessages([...messages, { text: input, sender: 'user' }]);
+  
+    setMessages([...messages, { text: input, sender: 'user' }]);  // Add user message
+  
+    try {
+      const response = await fetch("http://127.0.0.1:5000/chat", {  // Call Flask API
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input }),  // Send user input as JSON
+      });
+  
+      const data = await response.json();
+      setMessages((prev) => [...prev, { text: data.response, sender: 'bot' }]);  // Add bot response
+    } catch (error) {
+      console.error("Error connecting to server:", error);
+      setMessages((prev) => [...prev, { text: "Error: Couldn't connect to server", sender: 'bot' }]);
+    }
+  
     setInput('');
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        { text: 'Hello! How can I help you?', sender: 'bot' },
-      ]);
-    }, 500);
   };
+  
 
   return (
     <div className="relative min-h-screen gap-5 flex items-stretch justify-center bg-gray-100 p-6">
@@ -33,8 +55,7 @@ export default function Chatbot() {
       {/* Chatbot Panel */}
       <div className="relative flex flex-col w-3/2 bg-white rounded-2xl shadow-lg p-6 overflow-hidden">
         {/* Background Image with Overlay */}
-        <div
-          className="absolute inset-0 z-0 rounded-2xl"
+        <div className="absolute inset-0 z-0 rounded-2xl"
           style={{
             backgroundImage: "url('/plant-bg.jpg')",
             backgroundSize: 'cover',
@@ -72,10 +93,7 @@ export default function Chatbot() {
               onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
             />
             <button className="p-2 text-white bg-green-500 rounded-lg hover:bg-green-600 transition-colors duration-300" onClick={sendMessage}>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                <path d="M0 0h24v24H0z" fill="none" />
-                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-              </svg>
+              Send
             </button>
           </div>
         </div>
