@@ -1,4 +1,5 @@
 import os
+import re
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -60,14 +61,7 @@ def generate_response(conversation_history):
 
     return bot_response
 
-import re
 
-def clean_response(text):
-    """Remove Markdown formatting (*, _, -) and extra spaces."""
-    text = re.sub(r"[*_`]", "", text)  # Remove *, _, ` symbols
-    text = re.sub(r"\s+", " ", text).strip()  # Remove extra spaces
-    text = text.replace("\n", " ")  # Replace new lines with spaces for better display
-    return text
 
 @app.route("/chat", methods=["POST"])
 def chat():
@@ -84,9 +78,6 @@ def chat():
         ]
 
         bot_response = generate_response(conversation_history)
-
-    # Clean response before sending it to frontend
-    bot_response = clean_response(bot_response)
 
     print(f"User: {user_message}\nBot: {bot_response}\n" + "-"*50)
     return jsonify({"response": bot_response})
