@@ -1,0 +1,2 @@
+Requirement already satisfied: click in d:\programs\anaconda\envs\tf-gpu\lib\site-packages (8.1.8)
+Requirement already satisfied: colorama in d:\programs\anaconda\envs\tf-gpu\lib\site-packages (from click) (0.4.6)
